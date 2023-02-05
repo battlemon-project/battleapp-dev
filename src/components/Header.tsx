@@ -36,7 +36,7 @@ function Header() {
                 </>
                 :
                 // <button onClick={ethos.showSignInModal} className="btn btn-lg btn-outline-light">Sign In</button>
-                <ConnectButton />
+                <ConnectButton label="Connect" />
               }
             </li>
           </ul>

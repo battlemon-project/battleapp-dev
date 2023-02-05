@@ -9,8 +9,10 @@ interface Props {
 const Layout: React.FunctionComponent<Props> = (props:Props) => {
   return <>
     <Header />
-    <div id="page-content-wrapper" className="d-flex align-items-center w-100" style={{minHeight: 'calc(100vh - 200px)'}}>
-      {props.children}
+    <div id="page-content-wrapper" className="d-flex align-items-center" style={{minHeight: 'calc(100vh - 200px)'}}>
+      <div className="w-100">
+        {props.children}
+      </div>
     </div>
     <Footer />
   </>
