@@ -1,10 +1,18 @@
 import { SceneLoader, Scene, ActionManager, ExecuteCodeAction, Vector3, TransformNode } from "@babylonjs/core";
 import "@babylonjs/loaders";
-import { useContext, useEffect, memo } from 'react';
+import { useContext, useEffect } from 'react';
 import { SceneContext } from 'babylonjs-hook';
+import { useNavigate } from "react-router-dom";
+import LoadingScreen from '../helpers/LoadingScreen'
 
-const LoadPlatforms = (scene: Scene, canvas: HTMLCanvasElement) => {
-  SceneLoader.ImportMesh("","/models/hub/", 'BTLMN_LemonPlatforms.glb', scene, () => {
+function Platforms() {
+  const navigate = useNavigate();
+  const context = useContext(SceneContext);
+  const scene = context.scene as Scene;
+  const engine = scene?.getEngine();
+  const canvas = engine?.getRenderingCanvas() as HTMLCanvasElement;
+  
+  const constructor = () => {
     const direction = [
       {forward: 3, backward: 2},
       {forward: 1, backward: 3},
@@ -73,7 +81,7 @@ const LoadPlatforms = (scene: Scene, canvas: HTMLCanvasElement) => {
       }));
       
       collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
-        alert(1)
+        //navigate('/')
       }))
       
     });
@@ -106,19 +114,20 @@ const LoadPlatforms = (scene: Scene, canvas: HTMLCanvasElement) => {
     canvas.addEventListener("pointerdown", pointerDown);
     canvas.addEventListener("pointerup", pointerUp);
     canvas.addEventListener("pointermove", pointerMove);
-  })  
-}
+  }
 
-function Platforms() {
-  const context = useContext(SceneContext);
-  const scene = context.scene as Scene;
-  const canvas = scene?.getEngine().getRenderingCanvas() as HTMLCanvasElement;
-  
   useEffect(() => {
     if (!scene || !canvas) return;
-    LoadPlatforms(scene, canvas);
+    const engine = scene.getEngine();
+    engine.loadingScreen = new LoadingScreen(canvas)
+    engine.displayLoadingUI();
+    scene.executeWhenReady(() => engine.hideLoadingUI());
+    SceneLoader.ImportMesh("","/resources/models/", 'BTLMN_LemonPlatforms.glb', scene, constructor);    
+    
+    return () => {
+      engine.hideLoadingUI()
+    }
   }, [scene, canvas]);
-
 
   return <></>;
 }
