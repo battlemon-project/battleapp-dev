@@ -94,6 +94,11 @@ body {
   background: transparent;
 }
 
+.wkit-dialog__close {
+  padding: 0;
+  line-height: 18px;
+}
+
 .icon-box {
   border-radius: 10px;
   text-align: center;

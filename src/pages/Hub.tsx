@@ -2,6 +2,7 @@ import { Scene, ArcRotateCamera, Vector3, HemisphericLight, Color4, CubeTexture 
 import SceneComponent from 'babylonjs-hook';
 import Platforms from '../scenes/Platforms'
 import Layout from "../components/Layout";
+import { useWallet } from '@suiet/wallet-kit';
 
 const onSceneReady = (scene: Scene) => {
   const engine = scene.getEngine();
@@ -26,9 +27,11 @@ const onRender = (scene: Scene) => {
 }
 
 function Home() {
+  const { connected } = useWallet()
+
   return (
     <Layout>
-      <SceneComponent antialias={true} onSceneReady={onSceneReady} onRender={onRender} className="vh-100 w-100 position-absolute top-0">
+      <SceneComponent key={connected ? 1 : 0} antialias={true} onSceneReady={onSceneReady} onRender={onRender} className="vh-100 w-100 position-absolute top-0">
         <Platforms />
       </SceneComponent>
     </Layout>

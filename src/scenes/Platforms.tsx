@@ -1,9 +1,10 @@
 import { SceneLoader, Scene, ActionManager, ExecuteCodeAction, Vector3, TransformNode } from "@babylonjs/core";
 import "@babylonjs/loaders";
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SceneContext } from 'babylonjs-hook';
 import { useNavigate } from "react-router-dom";
-import LoadingScreen from '../helpers/LoadingScreen'
+import LoadingScreen from '../helpers/LoadingScreen';
+import {ConnectModal, useWallet} from '@suiet/wallet-kit';
 
 function Platforms() {
   const navigate = useNavigate();
@@ -11,6 +12,8 @@ function Platforms() {
   const scene = context.scene as Scene;
   const engine = scene?.getEngine();
   const canvas = engine?.getRenderingCanvas() as HTMLCanvasElement;
+  const [showSuietModal, setShowSuietModal] = useState(false);
+  const { connected } = useWallet()
   
   const constructor = () => {
     const direction = [
@@ -81,7 +84,9 @@ function Platforms() {
       }));
       
       collider.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnPickTrigger, async function(){
-        //navigate('/')
+        if (!connected) {
+          setShowSuietModal(true);
+        }
       }))
       
     });
@@ -129,7 +134,16 @@ function Platforms() {
     }
   }, [scene, canvas]);
 
-  return <></>;
+  return <>
+    <ConnectModal
+      open={showSuietModal}
+      onOpenChange={(open) => {
+        if (connected) return;
+        setShowSuietModal(open)
+      }}
+    >
+    </ConnectModal>
+  </>;
 }
 
 export default Platforms

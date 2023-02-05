@@ -5,6 +5,11 @@ function Header() {
   const wallet = useWallet();
   const fps = 60;
   
+  const signOut = () => {
+    localStorage.removeItem('WK__LAST_CONNECT_WALLET_NAME')
+    wallet.disconnect()
+  }
+
   return (
     <nav className="navbar navbar-expand-lg sticky-top navbar-dark">
       <div className="container">
@@ -16,7 +21,7 @@ function Header() {
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 fs-5">
             {fps && <li className="nav-item">
               <span className="nav-link" style={{color: 'white'}}>
-                <span id="fps">0</span> FPS
+                <span id="fps">60</span> FPS
               </span>
             </li> }
           </ul>
@@ -31,7 +36,7 @@ function Header() {
                     </span>
                   </button>
                   <ul className="dropdown-menu w-100" aria-labelledby="navbarDropdown">
-                    <li><a className="dropdown-item" href={"#"} onClick={() => {wallet.disconnect()}}>Sign Out</a></li>
+                    <li><a className="dropdown-item" href={"#"} onClick={signOut}>Sign Out</a></li>
                   </ul>
                 </>
                 :
