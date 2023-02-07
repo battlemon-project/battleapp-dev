@@ -43,6 +43,9 @@ function Town() {
   const scene = context.scene as Scene;
   const engine = scene?.getEngine();
   const canvas = engine?.getRenderingCanvas() as HTMLCanvasElement;
+  if (engine) {
+    engine.loadingScreen = new LoadingScreen(canvas)
+  }
 
   const constructor = (meshes: AbstractMesh[], particleSystems: IParticleSystem[], skeletons: Skeleton[], animationGroups: AnimationGroup[], transformNodes: TransformNode[], geometries: Geometry[], lights: Light[]) => {
     animationGroups.forEach(animation => animation.start(true, 1))
@@ -91,9 +94,7 @@ function Town() {
   }
 
   useEffect(() => {
-    if (!scene || !canvas) return;
-    const engine = scene.getEngine();
-    engine.loadingScreen = new LoadingScreen(canvas)
+    if (!scene || !canvas || !engine) return;
     engine.displayLoadingUI();
     scene.executeWhenReady(() => engine.hideLoadingUI());
     SceneLoader.ImportMesh("","/resources/models/", 'MainMenu_Stripes_Export.glb', scene, constructor);
@@ -101,7 +102,7 @@ function Town() {
     return () => {
       engine.hideLoadingUI()
     }
-  }, [scene, canvas]);
+  }, [context]);
 
   return <></>;
 }

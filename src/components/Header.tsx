@@ -1,15 +1,12 @@
-import { useWallet, ConnectButton } from '@suiet/wallet-kit';
+import { ConnectButton, useWallet } from '@suiet/wallet-kit';
+import { useSui } from '../helpers/Sui';
 import Logo from './Logo'
 
 function Header() {
-  const wallet = useWallet();
+  const { address } = useWallet();
+  const { signOut } = useSui();
   const fps = 60;
   
-  const signOut = () => {
-    localStorage.removeItem('WK__LAST_CONNECT_WALLET_NAME')
-    wallet.disconnect()
-  }
-
   return (
     <nav className="navbar navbar-expand-lg sticky-top navbar-dark">
       <div className="container">
@@ -27,12 +24,12 @@ function Header() {
           </ul>
           <ul className="navbar-nav mb-2 mb-lg-0 fs-5">
             <li className="nav-item dropdown">
-              {wallet?.address ?
+              {address ?
                 <>
                   <button className="btn btn-lg btn-outline-light dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <span className="short_address">
-                      <span className="ellipsis">{wallet?.address}</span>
-                      <span className="indent">{wallet?.address}</span>
+                      <span className="ellipsis">{address}</span>
+                      <span className="indent">{address}</span>
                     </span>
                   </button>
                   <ul className="dropdown-menu w-100" aria-labelledby="navbarDropdown">

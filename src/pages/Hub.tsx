@@ -3,10 +3,12 @@ import SceneComponent from 'babylonjs-hook';
 import Platforms from '../scenes/Platforms'
 import Layout from "../components/Layout";
 import { useWallet } from '@suiet/wallet-kit';
+import LoadingScreen from '../helpers/LoadingScreen'
 
 const onSceneReady = (scene: Scene) => {
   const engine = scene.getEngine();
   const canvas = engine.getRenderingCanvas();
+  engine.loadingScreen = new LoadingScreen(canvas!)
   const camera = new ArcRotateCamera("camera", Math.PI/2, Math.PI/2.1, 450, new Vector3(0,0,0), scene);
   camera.attachControl(canvas, true);
 
@@ -31,7 +33,7 @@ function Home() {
 
   return (
     <Layout>
-      <SceneComponent key={connected ? 1 : 0} antialias={true} onSceneReady={onSceneReady} onRender={onRender} className="vh-100 w-100 position-absolute top-0">
+      <SceneComponent antialias={true} onSceneReady={onSceneReady} onRender={onRender} className="vh-100 w-100 position-absolute top-0">
         <Platforms />
       </SceneComponent>
     </Layout>
